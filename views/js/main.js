@@ -508,13 +508,16 @@ function updatePositions() {
   // moved the calculation of 'document.body.scrollTop' outside of the for loop
   // changed 'querySelectorAll' to 'getElementsByClassName' 
   
+ // made two loops and calculate phase out of main loop(suggestion from my reviewer)
   var items = document.getElementsByClassName('mover');
   var Y =document.body.scrollTop;
   var len = items.length;
-  var phase;
+  var phase = [];
+  for (i = 0; i < 5; i++){
+	  phase.push(Math.sin((Y / 1250) + i)); 
+	  }
   for (var i = 0; i < len; i++) {
-    phase = Math.sin((Y / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.left = items[i].basicLeft + 100 * phase[i % 5] + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -526,20 +529,20 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
-
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var s = 256;
-  // calculate cols & rows based on screen size 
+   var cols = 8;
  // Changed querySelector to getElementById 
-  var cols = screen.width / s;
-  var rows = screen.height / 100;
-  var pizzasNum = cols * rows;
-  var elem;
-  for (var i = 0; i < pizzasNum; i++) {
+  
+ // var rows = screen.height / 100;
+ // var pizzasNum = cols * rows;
+ // var elem;
+ // simple approach this time, reduced number...
+  for (var i = 0; i < 40; i++) {
     elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
